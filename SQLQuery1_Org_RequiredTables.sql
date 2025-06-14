@@ -5,6 +5,25 @@ GO
 
 /***		Required TABLES			***/
 
+CREATE TABLE UserPerson
+(
+	UserPersonId INT IDENTITY(1,1),
+	UserPersonName NVARCHAR(200)
+);
+
+INSERT INTO UserPerson (UserPersonName) VALUES
+('Aarav Sharma'),
+('Priya Koirala'),
+('Ramesh Thapa'),
+('Sneha Adhikari'),
+('Binod Shrestha'),
+('Kriti Dhakal'),
+('Dipesh Lama'),
+('Sunita Gurung'),
+('Anish Bhandari'),
+('Nisha Poudel');
+
+
 CREATE TABLE Organization
 (
 	OrganizationId INT IDENTITY(101,1) PRIMARY KEY,
@@ -38,7 +57,7 @@ CREATE TABLE Company
 	OfficeId INT,
 	UserPersonId INT,
 	InsertDate DATE,
-
+	
 	CONSTRAINT Fk_OrgId FOREIGN KEY (OrganizationId) REFERENCES Organization(OrganizationId),
 	CONSTRAINT Fk_C_OffId FOREIGN KEY(OfficeId) REFERENCES Office(OfficeId)
 );
