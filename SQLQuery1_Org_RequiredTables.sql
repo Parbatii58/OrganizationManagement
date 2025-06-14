@@ -18,26 +18,29 @@ CREATE TABLE Organization
 );
 
 
+CREATE TABLE Office
+(
+	OfficeId INT IDENTITY(201,1) PRIMARY KEY,
+	OrganizationId INT,
+	OfficeLocation NVARCHAR(200),
+	Status NVARCHAR(200),
+	UserPersonId INT,
+	InsertDate DATE,
+
+	CONSTRAINT Fk_OrgaId FOREIGN KEY (OrganizationId) REFERENCES Organization(OrganizationId)
+);
+
 CREATE TABLE Company
 (
 	CompanyId INT IDENTITY(1,1),
 	CompanyName NVARCHAR(200),
 	OrganizationId INT,
+	OfficeId INT,
 	UserPersonId INT,
 	InsertDate DATE,
 
-	CONSTRAINT Fk_OrgId FOREIGN KEY (OrganizationId) REFERENCES Organization(OrganizationId)
-);
-
-
-CREATE TABLE Office
-(
-	OfficeId INT IDENTITY(201,1),
-	OrganizationId INT,
-	OfficeLocation NVARCHAR(200),
-	Status NVARCHAR(200),
-	UserPersonId INT,
-	InsertDate DATE
+	CONSTRAINT Fk_OrgId FOREIGN KEY (OrganizationId) REFERENCES Organization(OrganizationId),
+	CONSTRAINT Fk_C_OffId FOREIGN KEY(OfficeId) REFERENCES Office(OfficeId)
 );
 
 
@@ -48,7 +51,10 @@ CREATE TABLE NewCustomer
 	OfficeId INT,
 	Status NVARCHAR(200),
 	UserPersonId INT,
-	InsertDate DATE
+	InsertDate DATE,
+
+	CONSTRAINT Fk_Nc_OrgId FOREIGN KEY(OrganizationId) REFERENCES Organization(OrganizationId),
+	CONSTRAINT Fk_Nc_OffId FOREIGN KEY(OfficeId) REFERENCES Office(OfficeId)
 );
 
 
