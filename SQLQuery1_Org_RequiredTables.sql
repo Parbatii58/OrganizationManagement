@@ -42,7 +42,6 @@ CREATE TABLE Company
 	CompanyId INT IDENTITY(1,1),
 	CompanyName NVARCHAR(200),
 	OrganizationId INT,
-	OfficeId INT,
 	UserPersonId INT,
 	InsertDate DATE,
 	
@@ -54,7 +53,6 @@ CREATE TABLE NewCustomer
 (
 	NewCustomerId INT IDENTITY(1,1),
 	OrganizationId INT,
-	OfficeId INT,
 	Status NVARCHAR(200),
 	UserPersonId INT,
 	InsertDate DATE,
