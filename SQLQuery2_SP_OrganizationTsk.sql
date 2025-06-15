@@ -26,8 +26,6 @@ BEGIN
 			--Insert in organization
 			EXEC SpOrganizationIns @json = @json OUTPUT;
 
-			-- Insert in Office 
-			EXEC SpOfficeIns @json = @json OUTPUT;
 			-- Insert in either NewCustomer or Company
 			IF @entity= 'NewCustomer'
 			BEGIN
@@ -74,7 +72,7 @@ N'
 {
   "UserPersonId": 1,
   "Entity": "NewCustomer",
-  "data": [
+  "Data": [
     {
       "OrganizationName": "Everest Traders",
       "Department": "Sales",

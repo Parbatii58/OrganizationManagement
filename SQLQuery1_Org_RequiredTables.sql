@@ -30,12 +30,13 @@ CREATE TABLE Organization
 	OrganizationName NVARCHAR(200),
 	Department	NVARCHAR(200),
 	Parent INT NULL,
-	ROOT INT NOT NULL,
+	ROOT INT NULL,
 	Status NVARCHAR(200),
 	UserPersonId INT,
 	InsertDate DATE
 );
 ALTER TABLE Organization ADD CONSTRAINT Fk_UserA FOREIGN KEY(UserPersonId) REFERENCES UserPerson(UserPersonId)
+
 
 CREATE TABLE Company
 (
@@ -94,7 +95,6 @@ CREATE TABLE OrganizationAddress
 	CONSTRAINT Fk_OrgAddressorg FOREIGN KEY(OrganizationId) REFERENCES Organization(OrganizationId),
 	CONSTRAINT Fk_OrgAddressAdd FOREIGN KEY(AddressId)		REFERENCES Address(AddressId)
 );
-
 
 CREATE TABLE OrganizationContact
 (
