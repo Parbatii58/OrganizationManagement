@@ -7,7 +7,7 @@ GO
 
 CREATE TABLE UserPerson
 (
-	UserPersonId INT IDENTITY(1,1),
+	UserPersonId INT IDENTITY(1,1) PRIMARY KEY,
 	UserPersonName NVARCHAR(200)
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE Organization
 	UserPersonId INT,
 	InsertDate DATE
 );
-
+ALTER TABLE Organization ADD CONSTRAINT Fk_UserA FOREIGN KEY(UserPersonId) REFERENCES UserPerson(UserPersonId)
 
 CREATE TABLE Company
 (
@@ -47,7 +47,7 @@ CREATE TABLE Company
 	
 	CONSTRAINT Fk_OrgId FOREIGN KEY (OrganizationId) REFERENCES Organization(OrganizationId)
 );
-
+ALTER TABLE Company ADD CONSTRAINT Fk_UserB FOREIGN KEY(UserPersonId) REFERENCES UserPerson(UserPersonId)
 
 CREATE TABLE NewCustomer
 (
@@ -59,7 +59,7 @@ CREATE TABLE NewCustomer
 
 	CONSTRAINT Fk_Nc_OrgId FOREIGN KEY(OrganizationId) REFERENCES Organization(OrganizationId)
 );
-
+ALTER TABLE NewCustomer ADD CONSTRAINT Fk_UserAb FOREIGN KEY(UserPersonId) REFERENCES UserPerson(UserPersonId)
 
 CREATE TABLE Address
 (
@@ -72,7 +72,7 @@ CREATE TABLE Address
 	UserPersonId INT,
 	InsertDate DATE
 );
-
+ALTER TABLE Address ADD CONSTRAINT Fk_UserBC FOREIGN KEY(UserPersonId) REFERENCES UserPerson(UserPersonId)
 
 CREATE TABLE Contact
 (
@@ -83,7 +83,7 @@ CREATE TABLE Contact
 	UserPersonId INT,
 	InsertDate DATE
 );
-
+ALTER TABLE Contact ADD CONSTRAINT Fk_UserCon FOREIGN KEY(UserPersonId) REFERENCES UserPerson(UserPersonId)
 
 CREATE TABLE OrganizationAddress
 (
