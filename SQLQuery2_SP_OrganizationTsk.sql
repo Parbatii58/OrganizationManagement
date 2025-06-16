@@ -33,7 +33,7 @@ BEGIN
 			END
 			ELSE IF @entity = 'Company'
 			BEGIN
-				EXEC SpCompanyIns 
+				EXEC SpCompanyIns @json = @json OUTPUT
 			END
 			-- Insert in Address
 			EXEC SpAddressIns @json = @json OUTPUT
