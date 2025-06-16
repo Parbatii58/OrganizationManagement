@@ -27,7 +27,7 @@ BEGIN
 			OrganizationId INT,
 			ContactId INT
 		);
-		INSERT INTO OrganizationContactCheck(OrganizationId, ContactId)
+		INSERT INTO OrganizationContact(OrganizationId, ContactId)
 		OUTPUT INSERTED.* INTO @insertOc
 		SELECT OrganizationId, ContactId 
 		FROM #temp;
