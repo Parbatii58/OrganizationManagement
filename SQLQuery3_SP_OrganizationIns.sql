@@ -28,12 +28,11 @@ BEGIN
 				PhoneNumber NVARCHAR(200),
 				Email NVARCHAR(200),
 				Website NVARCHAR(200),
-				UserPersonId INT,
-				InsertDate DATE
+				UserPersonId INT
 			);
 			-- populate in the #temp table
-			INSERT INTO #temp (OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, UserPersonId, InsertDate)
-			SELECT DISTINCT OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, @UserPersonId, GETDATE()
+			INSERT INTO #temp (OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, UserPersonId)
+			SELECT DISTINCT OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, @UserPersonId
 			FROM OPENJSON(@json, '$.Data')
 			WITH
 			(
@@ -65,7 +64,7 @@ BEGIN
 			-- inserting values in organization 
 			INSERT INTO Organization(OrganizationName, Department, Parent, ROOT, Status, UserPersonId, InsertDate)
 			OUTPUT INSERTED.* INTO @insertOrg
-			SELECT t.OrganizationName, t.Department, t.Parent, NULL, t.Status, t.UserPersonId, t.InsertDate
+			SELECT t.OrganizationName, t.Department, t.Parent, NULL, t.Status, t.UserPersonId, GETDATE()
 			FROM #temp t
 			WHERE NOT EXISTS
 			(
@@ -92,16 +91,18 @@ BEGIN
 			-- adding organizationid in the json in order to pass it to other tables
 			SET @json = (SELECT t.* , i.OrganizationId
 							FROM #temp t INNER JOIN @insertOrg i 
-							ON i.OrganizationName = t.OrganizationName 
-							AND i.Department = t.Department 
-							AND i.Parent = t.Parent
-							AND i.Status = t.Status
+							ON t.OrganizationName = i.OrganizationName 
+							AND t.Department = i.Department 
+							AND ((t.Parent = i.Parent) OR (t.Parent IS NULL AND i.Parent IS NULL))
+							AND t.Status = i.Status
 							FOR JSON PATH
 							);
+
+			PRINT @json;
+			SELECT * FROM @insertOrg;
 			-- it is compulsory to drop #temp table
 			DROP TABLE #temp;
-			SELECT * FROM @insertOrg;
-		COMMIT TRANSACTION
+					COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
 		IF @@TRANCOUNT>0
@@ -114,7 +115,7 @@ BEGIN
 		SET @Error_Message  = ERROR_MESSAGE();
 		SET @Error_Line		= ERROR_LINE();
 		SET @Error_Procedure= ERROR_PROCEDURE();
-		PRINT 'Error line is:		' + @Error_Line;
+		PRINT 'Error line is:		' + CAST(@Error_Line AS NVARCHAR);
 		PRINT 'Error procedure is:  ' + ISNULL(@Error_Procedure, 'Unknown Procedure');
 		PRINT 'Error message is:	' + @Error_Message;
 		RAISERROR(@Error_Message, 16,1 );
@@ -131,25 +132,26 @@ N'
   "UserPersonId": 1,
   "Entity": "NewCustomer",
   "Data": [
-    {
-      "OrganizationName": "Everest Traders",
-      "Department": "Sales",
-      "Parent": 102,
-      "Status": "Active",
-      "Street": "New Road",
-      "City": "Kathmandu",
-      "State": "Bagmati",
-      "ZipCode": "44600",
-      "Country": "Nepal",
-      "PhoneNumber": "+977-1-1234567",
-      "Email": "info@everesttraders.com",
-      "Website": "https://everestrader.com"
-    }
+    
+	{
+  "OrganizationName": "Hyderabad Enterprises",
+  "Department": "Sales",
+  "Parent": null,
+  "Status": "Active",
+  "Street": "Banjara Hills",
+  "City": "Hyderabad",
+  "State": "Telangana",
+  "ZipCode": "500034",
+  "Country": "India",
+  "PhoneNumber": "+91-40-23456789",
+  "Email": "contact@hyderabadenterprises.in",
+  "Website": "https://hyderabadenterprises.in"
+
+		}
   ]
 }
 '
-
-
+EXEC SpOrganizationIns @json
 
 /**
 -- I created this table to check if the SpOrganizationIns works or not

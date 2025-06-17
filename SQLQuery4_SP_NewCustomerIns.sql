@@ -52,7 +52,7 @@ BEGIN
 
 			INSERT INTO NewCustomer(OrganizationId, Status, UserPersonId, InsertDate)
 			OUTPUT INSERTED.* INTO @insertNc
-			SELECT OrganizationId, Status, UserPersonId, getdate()
+			SELECT OrganizationId, Status, UserPersonId, GETDATE()
 			FROM #temp
 
 			SELECT * FROM @insertNc;
