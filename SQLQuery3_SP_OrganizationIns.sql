@@ -15,6 +15,7 @@ BEGIN
 			-- temporary table to populate json value
 			CREATE TABLE #temp
 			(
+				CompanyName NVARCHAR(200) NULL,
 				OrganizationName NVARCHAR(200),
 				Department NVARCHAR(200),
 				Parent INT NULL,
@@ -31,11 +32,12 @@ BEGIN
 				UserPersonId INT
 			);
 			-- populate in the #temp table
-			INSERT INTO #temp (OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, UserPersonId)
-			SELECT DISTINCT OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, @UserPersonId
+			INSERT INTO #temp (CompanyName, OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, UserPersonId)
+			SELECT DISTINCT CompanyName, OrganizationName, Department, Parent, Status, Street, City, State, ZipCode, Country, PhoneNumber, Email, Website, @UserPersonId
 			FROM OPENJSON(@json, '$.Data')
 			WITH
-			(
+			(	
+				CompanyName NVARCHAR(200),
 				OrganizationName NVARCHAR(200),
 				Department NVARCHAR(200),
 				Parent INT,
@@ -76,12 +78,11 @@ BEGIN
 			)
 			-- Since the root is Null so we update it in the table
 			UPDATE o
-			SET Root = ISNULL(oo.Root, o.OrganizationId)
+			SET Root = ISNULL(p.Root, o.OrganizationId)
 			FROM Organization o
-			JOIN @insertOrg i
-			ON o.OrganizationId = i.OrganizationId
-			LEFT JOIN Organization oo
-			ON o.OrganizationId = oo.Parent
+			JOIN @insertOrg i ON o.OrganizationId = i.OrganizationId
+			LEFT JOIN Organization p ON o.Parent = p.OrganizationId;
+
 			--update root in @insertorg table
 			UPDATE i
 			SET i.Root = o.Root

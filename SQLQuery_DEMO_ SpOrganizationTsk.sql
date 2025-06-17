@@ -1,298 +1,424 @@
 USE OrganizationInfo
 GO
 --	MAKE SURE the UserPerson ranges from 1 to 10
---  MAKE SURE the parent ranges from: 115 10 124
---		SELECT * FROM Organization
+--  MAKE SURE the parent ranges from: 185 10 225
+--		SELECT * FROM Organization 
+
+--FOR entity-NewCustomer
+DECLARE @json NVARCHAR(MAX)=
+N'
+{
+  "UserPersonId": 7,
+  "Entity": "NewCustomer",
+  "Data": [
+    {
+      "OrganizationName": "SZ TechWorks",
+      "Department": "Engineering",
+     
+      "Status": "Active",
+      "Street": "Innovation Rd",
+      "City": "Shenzhen",
+      "State": "Guangdong",
+      "ZipCode": "518000",
+      "Country": "China",
+      "PhoneNumber": "+86-755-12345678",
+      "Email": "info@sztechworks.cn",
+      "Website": "https://sztechworks.cn"
+    },
+    {
+      "OrganizationName": "BJ MarketReach",
+      "Department": "Marketing",
+      "Parent": 186,
+      "Status": "Pending",
+      "Street": "Market St",
+      "City": "Beijing",
+      "State": "Beijing",
+      "ZipCode": "100000",
+      "Country": "China",
+      "PhoneNumber": "+86-10-87654321",
+      "Email": "contact@bjmarket.cn",
+      "Website": "https://bjmarket.cn"
+    },
+    {
+      "OrganizationName": "SH BioSolutions",
+      "Department": "Biotech",
+      "Parent": 202,
+      "Status": "Active",
+      "Street": "Science Park",
+      "City": "Shanghai",
+      "State": "Shanghai",
+      "ZipCode": "200120",
+      "Country": "China",
+      "PhoneNumber": "+86-21-12341234",
+      "Email": "info@shbiosol.cn",
+      "Website": "https://shbiosol.cn"
+    },
+    {
+      "OrganizationName": "GZ Transport Tech",
+      "Department": "Transportation",
+      "Parent": 188,
+      "Status": "Active",
+      "Street": "Transit Ave",
+      "City": "Guangzhou",
+      "State": "Guangdong",
+      "ZipCode": "510000",
+      "Country": "China",
+      "PhoneNumber": "+86-20-22334455",
+      "Email": "hello@gztransport.cn",
+      "Website": "https://gztransport.cn"
+    },
+    {
+      "OrganizationName": "NJ Softworks",
+      "Department": "IT",
+      "Parent": 202,
+      "Status": "Pending",
+      "Street": "Code Lane",
+      "City": "Nanjing",
+      "State": "Jiangsu",
+      "ZipCode": "210000",
+      "Country": "China",
+      "PhoneNumber": "+86-25-33445566",
+      "Email": "support@njsoft.cn",
+      "Website": "https://njsoft.cn"
+    },
+    {
+      "OrganizationName": "HZ SmartTech",
+      "Department": "Research",
+      
+      "Status": "Active",
+      "Street": "AI Street",
+      "City": "Hangzhou",
+      "State": "Zhejiang",
+      "ZipCode": "310000",
+      "Country": "China",
+      "PhoneNumber": "+86-571-11223344",
+      "Email": "ai@hzsmart.cn",
+      "Website": "https://hzsmart.cn"
+    },
+    {
+      "OrganizationName": "XM Ocean Systems",
+      "Department": "Marine",
+      "Parent": 200,
+      "Status": "Active",
+      "Street": "Harbor Rd",
+      "City": "Xiamen",
+      "State": "Fujian",
+      "ZipCode": "361000",
+      "Country": "China",
+      "PhoneNumber": "+86-592-22334455",
+      "Email": "contact@xmocean.cn",
+      "Website": "https://xmocean.cn"
+    },
+    {
+      "OrganizationName": "CD Environmental",
+      "Department": "Environment",
+      "Parent": 185,
+      "Status": "Pending",
+      "Street": "Eco Street",
+      "City": "Chengdu",
+      "State": "Sichuan",
+      "ZipCode": "610000",
+      "Country": "China",
+      "PhoneNumber": "+86-28-33445566",
+      "Email": "info@cdgreen.cn",
+      "Website": "https://cdgreen.cn"
+    },
+    {
+      "OrganizationName": "TJ Freight Co",
+      "Department": "Logistics",
+      "Parent": 204,
+      "Status": "Active",
+      "Street": "Logistics Blvd",
+      "City": "Tianjin",
+      "State": "Tianjin",
+      "ZipCode": "300000",
+      "Country": "China",
+      "PhoneNumber": "+86-22-44556677",
+      "Email": "logistics@tjfreight.cn",
+      "Website": "https://tjfreight.cn"
+    },
+    {
+      "OrganizationName": "WH MedTech",
+      "Department": "Medical",
+      "Parent": 199,
+      "Status": "Active",
+      "Street": "Health Ave",
+      "City": "Wuhan",
+      "State": "Hubei",
+      "ZipCode": "430000",
+      "Country": "China",
+      "PhoneNumber": "+86-27-55667788",
+      "Email": "contact@whmedtech.cn",
+      "Website": "https://whmedtech.cn"
+    },
+    {
+      "OrganizationName": "CQ Construction",
+      "Department": "Construction",
+      "Parent": 190,
+      "Status": "Active",
+      "Street": "Builder St",
+      "City": "Chongqing",
+      "State": "Chongqing",
+      "ZipCode": "400000",
+      "Country": "China",
+      "PhoneNumber": "+86-23-77889900",
+      "Email": "info@cqconstruct.cn",
+      "Website": "https://cqconstruct.cn"
+    },
+    {
+      "OrganizationName": "DL Manufacturing",
+      "Department": "Manufacturing",
+     
+      "Status": "Pending",
+      "Street": "Industry Rd",
+      "City": "Dalian",
+      "State": "Liaoning",
+      "ZipCode": "116000",
+      "Country": "China",
+      "PhoneNumber": "+86-411-88990011",
+      "Email": "contact@dlmfg.cn",
+      "Website": "https://dlmfg.cn"
+    },
+    {
+      "OrganizationName": "SJ Electronics",
+      "Department": "Electronics",
+      "Parent": 196,
+      "Status": "Active",
+      "Street": "Tech Park",
+      "City": "Suzhou",
+      "State": "Jiangsu",
+      "ZipCode": "215000",
+      "Country": "China",
+      "PhoneNumber": "+86-512-99887766",
+      "Email": "support@sjele.cn",
+      "Website": "https://sjele.cn"
+    },
+    {
+      "OrganizationName": "FZ Textile",
+      "Department": "Textiles",
+      
+      "Status": "Active",
+      "Street": "Fabric Ave",
+      "City": "Fuzhou",
+      "State": "Fujian",
+      "ZipCode": "350000",
+      "Country": "China",
+      "PhoneNumber": "+86-591-66554433",
+      "Email": "info@fztextile.cn",
+      "Website": "https://fztextile.cn"
+    },
+    {
+      "OrganizationName": "NN Food Corp",
+      "Department": "Food",
+      
+      "Status": "Active",
+      "Street": "Food Street",
+      "City": "Nanning",
+      "State": "Guangxi",
+      "ZipCode": "530000",
+      "Country": "China",
+      "PhoneNumber": "+86-771-33445566",
+      "Email": "contact@nnfood.cn",
+      "Website": "https://nnfood.cn"
+    },
+    {
+      "OrganizationName": "XZ Logistics",
+      "Department": "Logistics",
+   
+      "Status": "Pending",
+      "Street": "Freight Rd",
+      "City": "Xuzhou",
+      "State": "Jiangsu",
+      "ZipCode": "221000",
+      "Country": "China",
+      "PhoneNumber": "+86-516-22334455",
+      "Email": "info@xzlogistics.cn",
+      "Website": "https://xzlogistics.cn"
+    },
+    {
+      "OrganizationName": "HK Digital Media",
+      "Department": "Media",
+      "Parent": 188,
+      "Status": "Active",
+      "Street": "Media Ave",
+      "City": "Haikou",
+      "State": "Hainan",
+      "ZipCode": "570000",
+      "Country": "China",
+      "PhoneNumber": "+86-898-33442211",
+      "Email": "media@hkdigital.cn",
+      "Website": "https://hkdigital.cn"
+    },
+    {
+      "OrganizationName": "JX Mining",
+      "Department": "Mining",
+      "Parent": 189,
+      "Status": "Active",
+      "Street": "Miner Rd",
+      "City": "Jixi",
+      "State": "Heilongjiang",
+      "ZipCode": "158100",
+      "Country": "China",
+      "PhoneNumber": "+86-468-55667788",
+      "Email": "contact@jxmining.cn",
+      "Website": "https://jxmining.cn"
+    },
+    {
+      "OrganizationName": "YN Pharmaceuticals",
+      "Department": "Pharmaceuticals",
+      "Parent": 185,
+      "Status": "Pending",
+      "Street": "Health Blvd",
+      "City": "Kunming",
+      "State": "Yunnan",
+      "ZipCode": "650000",
+      "Country": "China",
+      "PhoneNumber": "+86-871-22334455",
+      "Email": "info@ynpharma.cn",
+      "Website": "https://ynpharma.cn"
+    },
+    {
+      "OrganizationName": "LZ Renewable Energy",
+      "Department": "Energy",
+      
+      "Status": "Active",
+      "Street": "Solar St",
+      "City": "Lanzhou",
+      "State": "Gansu",
+      "ZipCode": "730000",
+      "Country": "China",
+      "PhoneNumber": "+86-931-77889900",
+      "Email": "contact@lzrenew.cn",
+      "Website": "https://lzrenew.cn"
+    }
+  ]
+}
+
+'
+
+EXEC SpOrganizationTsk @json OUTPUT
+
+
+-- FOR entity- Company
 
 
 DECLARE @json NVARCHAR(MAX)=
 N'
 {
-  "UserPersonId": 5,
-  "Entity": "NewCustomer",
+  "UserPersonId": 4,
+  "Entity": "Company",
   "Data": [
     {
-      "OrganizationName": "London Tech Hub",
-      "Department": "IT",
-      "Parent": 118,
+      "CompanyName": "Druk AgroTech",
+      "OrganizationName": "Bhutan Green Growers",
+      "Department": "Agriculture",
+      "Parent": 186,
       "Status": "Active",
-      "Street": "Old Street",
-      "City": "London",
-      "State": "England",
-      "ZipCode": "EC1V",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-20-79460001",
-      "Email": "info@londontechhub.co.uk",
-      "Website": "https://londontechhub.co.uk"
+      "Street": "Farmland Road",
+      "City": "Punakha",
+      "State": "Punakha",
+      "ZipCode": "14001",
+      "Country": "Bhutan",
+      "PhoneNumber": "+975-8-223344",
+      "Email": "contact@drukagro.bt",
+      "Website": "https://drukagro.bt"
     },
     {
-      "OrganizationName": "Manchester Logistics Ltd.",
-      "Department": "Logistics",
-      "Parent": 120,
-      "Status": "Inactive",
-      "Street": "Oxford Road",
-      "City": "Manchester",
-      "State": "England",
-      "ZipCode": "M13",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-161-1234567",
-      "Email": "contact@manlogistics.co.uk",
-      "Website": "https://manlogistics.co.uk"
-    },
-    {
-      "OrganizationName": "Glasgow Marketing Group",
-      "Department": "Marketing",
-      
-      "Status": "Active",
-      "Street": "Sauchiehall Street",
-      "City": "Glasgow",
-      "State": "Scotland",
-      "ZipCode": "G2",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-141-8765432",
-      "Email": "info@glasgowmarketing.co.uk",
-      "Website": "https://glasgowmarketing.co.uk"
-    },
-    {
-      "OrganizationName": "Birmingham Engineering Services",
-      "Department": "Engineering",
-      "Parent": 129,
+      "CompanyName": "Bhutan Media House",
+      "OrganizationName": "Druk News Network",
+      "Department": "Media",
+      "Parent": 188,
       "Status": "Pending",
-      "Street": "New Street",
-      "City": "Birmingham",
-      "State": "England",
-      "ZipCode": "B2",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-121-8888888",
-      "Email": "info@bhameng.co.uk",
-      "Website": "https://bhameng.co.uk"
+      "Street": "Press Lane",
+      "City": "Thimphu",
+      "State": "Thimphu",
+      "ZipCode": "11005",
+      "Country": "Bhutan",
+      "PhoneNumber": "+975-2-998877",
+      "Email": "editor@druknews.bt",
+      "Website": "https://druknews.bt"
     },
     {
-      "OrganizationName": "Leeds Creative Agency",
-      "Department": "Design",
-      "Parent": 131,
-      "Status": "Archived",
-      "Street": "The Headrow",
-      "City": "Leeds",
-      "State": "England",
-      "ZipCode": "LS1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-113-7654321",
-      "Email": "hello@leedscreative.co.uk",
-      "Website": "https://leedscreative.co.uk"
-    },
-    {
-      "OrganizationName": "Edinburgh Publishing House",
-      "Department": "Publishing",
-      "Parent": 137,
+      "CompanyName": "Himalayan Handicrafts",
+      "OrganizationName": "Bhutan Artisans Guild",
+      "Department": "Handicrafts",
+      "Parent": 190,
       "Status": "Active",
-      "Street": "Princes Street",
-      "City": "Edinburgh",
-      "State": "Scotland",
-      "ZipCode": "EH1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-131-9988776",
-      "Email": "info@edinpub.co.uk",
-      "Website": "https://edinpub.co.uk"
+      "Street": "Crafts Avenue",
+      "City": "Wangdue Phodrang",
+      "State": "Wangdue",
+      "ZipCode": "12002",
+      "Country": "Bhutan",
+      "PhoneNumber": "+975-3-667788",
+      "Email": "sales@bhutancrafts.bt",
+      "Website": "https://bhutancrafts.bt"
     },
     {
-      "OrganizationName": "Cardiff Health Group",
+      "CompanyName": "SnowLion TechWorks",
+      "OrganizationName": "Bhutan Tech Innovators",
+      "Department": "Technology",
+      "Parent": 192,
+      "Status": "Active",
+      "Street": "Innovation Park",
+      "City": "Gelephu",
+      "State": "Sarpang",
+      "ZipCode": "36001",
+      "Country": "Bhutan",
+      "PhoneNumber": "+975-6-334455",
+      "Email": "info@snowliontech.bt",
+      "Website": "https://snowliontech.bt"
+    },
+    {
+      "CompanyName": "Zangto Pelri Wellness",
+      "OrganizationName": "Bhutan Healing Center",
       "Department": "Healthcare",
       
       "Status": "Pending",
-      "Street": "Queen Street",
-      "City": "Cardiff",
-      "State": "Wales",
-      "ZipCode": "CF10",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-29-12345678",
-      "Email": "support@cardiffhealth.co.uk",
-      "Website": "https://cardiffhealth.co.uk"
+      "Street": "Healing Street",
+      "City": "Samdrup Jongkhar",
+      "State": "Samdrup",
+      "ZipCode": "39001",
+      "Country": "Bhutan",
+      "PhoneNumber": "+975-7-445566",
+      "Email": "care@zangtopelri.bt",
+      "Website": "https://zangtopelri.bt"
     },
     {
-      "OrganizationName": "Belfast Tech Solutions",
-      "Department": "IT",
-      "Parent": 133,
-      "Status": "Inactive",
-      "Street": "Royal Avenue",
-      "City": "Belfast",
-      "State": "Northern Ireland",
-      "ZipCode": "BT1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-28-7654321",
-      "Email": "info@belfasttech.co.uk",
-      "Website": "https://belfasttech.co.uk"
-    },
-    {
-      "OrganizationName": "Liverpool Maritime Co.",
-      "Department": "Shipping",
-      "Parent": 139,
+      "CompanyName": "Thunder Dragon Solutions",
+      "OrganizationName": "Bhutan Infrastructure Group",
+      "Department": "Construction",
+      "Parent": 196,
       "Status": "Active",
-      "Street": "Albert Dock",
-      "City": "Liverpool",
-      "State": "England",
-      "ZipCode": "L3",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-151-1122334",
-      "Email": "marine@liverpoolmaritime.co.uk",
-      "Website": "https://liverpoolmaritime.co.uk"
+      "Street": "Builders Way",
+      "City": "Phuentsholing",
+      "State": "Chukha",
+      "ZipCode": "21005",
+      "Country": "Bhutan",
+      "PhoneNumber": "+975-5-778899",
+      "Email": "info@tdsolutions.bt",
+      "Website": "https://tdsolutions.bt"
     },
     {
-      "OrganizationName": "Sheffield Finance Group",
-      "Department": "Finance",
-      "Parent": 117,
-      "Status": "Archived",
-      "Street": "High Street",
-      "City": "Sheffield",
-      "State": "England",
-      "ZipCode": "S1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-114-5566778",
-      "Email": "finance@sheffieldgroup.co.uk",
-      "Website": "https://sheffieldgroup.co.uk"
-    },
-    {
-      "OrganizationName": "Oxford Research Institute",
-      "Department": "Research",
-      "Parent": 140,
-      "Status": "Active",
-      "Street": "Broad Street",
-      "City": "Oxford",
-      "State": "England",
-      "ZipCode": "OX1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-1865-123456",
-      "Email": "info@oxfordresearch.co.uk",
-      "Website": "https://oxfordresearch.co.uk"
-    },
-    {
-      "OrganizationName": "Cambridge BioTech",
-      "Department": "Biotech",
-     
-      "Status": "Pending",
-      "Street": "Trinity Lane",
-      "City": "Cambridge",
-      "State": "England",
-      "ZipCode": "CB2",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-1223-987654",
-      "Email": "info@cambridgebiotech.co.uk",
-      "Website": "https://cambridgebiotech.co.uk"
-    },
-    {
-      "OrganizationName": "Brighton Tourism Board",
-      "Department": "Travel",
-      "Parent": 116,
-      "Status": "Inactive",
-      "Street": "Kings Road",
-      "City": "Brighton",
-      "State": "England",
-      "ZipCode": "BN1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-1273-321654",
-      "Email": "contact@brightontourism.co.uk",
-      "Website": "https://brightontourism.co.uk"
-    },
-    {
-      "OrganizationName": "York Heritage Foundation",
-      "Department": "History",
-      "Parent": 128,
-      "Status": "Active",
-      "Street": "Micklegate",
-      "City": "York",
-      "State": "England",
-      "ZipCode": "YO1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-1904-112233",
-      "Email": "info@yorkheritage.co.uk",
-      "Website": "https://yorkheritage.co.uk"
-    },
-    {
-      "OrganizationName": "Nottingham Robotics Ltd.",
-      "Department": "Engineering",
-      "Parent": 135,
-      "Status": "Archived",
-      "Street": "Talbot Street",
-      "City": "Nottingham",
-      "State": "England",
-      "ZipCode": "NG1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-115-334455",
-      "Email": "info@nottsrobotics.co.uk",
-      "Website": "https://nottsrobotics.co.uk"
-    },
-    {
-      "OrganizationName": "Southampton Shipping Lines",
-      "Department": "Logistics",
-      "Parent": 141,
-      "Status": "Pending",
-      "Street": "Town Quay",
-      "City": "Southampton",
-      "State": "England",
-      "ZipCode": "SO14",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-2380-998877",
-      "Email": "contact@southamptonshipping.co.uk",
-      "Website": "https://southamptonshipping.co.uk"
-    },
-    {
-      "OrganizationName": "Reading Green Energy",
-      "Department": "Energy",
-      "Parent": 138,
-      "Status": "Active",
-      "Street": "Friar Street",
-      "City": "Reading",
-      "State": "England",
-      "ZipCode": "RG1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-118-765432",
-      "Email": "energy@readinggreen.co.uk",
-      "Website": "https://readinggreen.co.uk"
-    },
-    {
-      "OrganizationName": "Plymouth Marine Tech",
-      "Department": "Marine",
-      "Parent": 119,
-      "Status": "Inactive",
-      "Street": "Union Street",
-      "City": "Plymouth",
-      "State": "England",
-      "ZipCode": "PL1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-1752-998877",
-      "Email": "info@plymouthmarine.co.uk",
-      "Website": "https://plymouthmarine.co.uk"
-    },
-    {
-      "OrganizationName": "Derby Rail Co.",
-      "Department": "Transport",
-      "Parent": 126,
-      "Status": "Active",
-      "Street": "Station Approach",
-      "City": "Derby",
-      "State": "England",
-      "ZipCode": "DE1",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-1332-223344",
-      "Email": "info@derbyrail.co.uk",
-      "Website": "https://derbyrail.co.uk"
-    },
-    {
-      "OrganizationName": "Luton Airport Services",
-      "Department": "Aviation",
+      "CompanyName": "Blue Sky Exports",
+      "OrganizationName": "Bhutan International Traders",
+      "Department": "Export",
       
       "Status": "Pending",
-      "Street": "Airport Way",
-      "City": "Luton",
-      "State": "England",
-      "ZipCode": "LU2",
-      "Country": "United Kingdom",
-      "PhoneNumber": "+44-1582-556677",
-      "Email": "support@lutonairport.co.uk",
-      "Website": "https://lutonairport.co.uk"
+      "Street": "Trade Zone",
+      "City": "Mongar",
+      "State": "Mongar",
+      "ZipCode": "43001",
+      "Country": "Bhutan",
+      "PhoneNumber": "+975-4-112233",
+      "Email": "export@bluesky.bt",
+      "Website": "https://bluesky.bt"
     }
   ]
 }
-'
 
+
+'
 EXEC SpOrganizationTsk @json OUTPUT
+
+
+SELECT * FROM Organization where Parent = 164
